@@ -1,0 +1,5 @@
+import mips;
+
+input p;
+
+load has StuckAt(7, 0) with probability 0.0008;

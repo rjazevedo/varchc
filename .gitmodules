@@ -1,0 +1,6 @@
+[submodule "MPSoCBench"]
+	path = MPSoCBench
+	url = git@github.com:lianaduenha/MPSoCBench.git
+[submodule "ArchC"]
+	path = ArchC
+	url = git@github.com:lianaduenha/ArchC.git

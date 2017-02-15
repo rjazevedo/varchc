@@ -1,0 +1,21 @@
+instruction lb, lbu, lh, lhu, lw, lwl, lwr, sb, sh, sw, swl, swr, addi, addiu, slti, sltiu, andi, ori, xori, lui;
+instruction beq, bne, blez, bgtz, bltz, bgez, bltzal, bgezal;
+instruction add, addu, sub, subu, slt, sltu, instr_and, instr_or, instr_xor, instr_nor;
+instruction nop, sll, srl, sra, sllv, srlv, srav, mult, multu, div, divu, mfhi, mthi, mflo, mtlo, jr, jalr;
+instruction sys_call, instr_break;
+instruction j, jal;
+
+group I {lb, lbu, lh, lhu, lw, lwl, lwr, sb, sh, sw, swl, swr, addi, addiu, slti, sltiu, andi, ori,
+         xori, lui, beq, bne, blez, bgtz, bltz, bgez, bltzal, bgezal};
+group R {add, addu, sub, subu, slt, sltu, instr_and, instr_or, instr_xor, instr_nor, nop, sll,
+         srl, sra, sllv, srlv, srav, mult, multu, div, divu, mfhi, mthi, mflo, mtlo, sys_call, instr_break,
+         jr, jalr};
+group J {j, jal};
+
+group alu {add, addu, sub, subu, slt, sltu, instr_and, instr_or, instr_xor, instr_nor,
+           addi, addiu, slti, sltiu, andi, ori, xori};
+group branch {beq, bne, blez, bgtz, bltz, bgez, bltzal, bgezal};
+group load {lb, lbu, lh, lhu, lw, lwl, lwr};
+group store {sh, sw, swl, swr};
+group memory {lb, lbu, lh, lhu, lw, lwl, lwr, sh, sw, swl, swr};
+group muldiv {mult, multu, div, divu};

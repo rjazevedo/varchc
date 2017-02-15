@@ -1,0 +1,35 @@
+Voltages = {1.0, 0.9, ...}
+Frequencies = {1000, 800, ...}
+
+PStates = {(Va, Fa), (Vb, Fb), (Vc, Fc), ...}
+
+TimingFailure(Vi, Fi, group) = (formula -> probabilidade) -> StuckHigh(17, 0)
+
+input p;
+
+alu has StuckAt(15, 0) with probability p;
+
+multiply has StuckHigh(17, 0) with probability TimingFailure(Vi, Fi);
+
+ReadRegister has BitFlip(random) with probability 1;
+
+ReadRegister(6) has BitFlip(1) && BitFlip(9) && BitFlip(15) with probability 0.0098;
+
+ReadMemoryAddress(0:2000) has StuckAt(0, 1) && StuckAt(1, 0) with probability 0.2;
+
+ReadMemoryData(3000:10000) has BitFlip(random) with probability 0.0001;
+
+Decoder has BitFlip(1) && StuckAt(0, 0) with probability 0.000001;
+
+FPDoubleMultiply is FPSingleMultiply when tivermos tempo
+
+import MIPS;
+import Plasma45nm;
+
+
+instructions add, sub;
+
+group alu is {add, sub, ...};
+
+
+RB[rd] &= 0x100;
