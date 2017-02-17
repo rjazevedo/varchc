@@ -1,16 +1,24 @@
 #!/usr/bin/python
 
 import unittest
+import string
 
 class Instruction:
     def __init__(self, instructionName):
         self.name = instructionName
+        self.targets = []
 
     def __str__(self):
         return self.name
 
     def __repr__(self):
-        return 'Instruction: ' + self.name
+        if len(self.targets) != 0:
+          return 'Instruction: ' + self.name + '(' + string.join(self.targets, ',') + ')'
+        else:
+            return 'Instruction: ' + self.name
+
+    def SetTarget(self, targetName):
+        self.targets.append(targetName)
 
 
 class TestInstruction(unittest.TestCase):

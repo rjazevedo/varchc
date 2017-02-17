@@ -1,3 +1,6 @@
+processor mips;
+wordsize 32;
+
 instruction lb, lbu, lh, lhu, lw, lwl, lwr, sb, sh, sw, swl, swr, addi, addiu, slti, sltiu, andi, ori, xori, lui;
 instruction beq, bne, blez, bgtz, bltz, bgez, bltzal, bgezal;
 instruction add, addu, sub, subu, slt, sltu, instr_and, instr_or, instr_xor, instr_nor;
@@ -19,3 +22,9 @@ group load {lb, lbu, lh, lhu, lw, lwl, lwr};
 group store {sh, sw, swl, swr};
 group memory {lb, lbu, lh, lhu, lw, lwl, lwr, sh, sw, swl, swr};
 group muldiv {mult, multu, div, divu};
+group jumpandlink {jal, jalr};
+
+alu target is rd;
+load target is rt;
+jumpandlink target is rd;
+

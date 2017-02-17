@@ -13,6 +13,10 @@ class Group:
     def AddInstruction(self, instruction):
         self.instructions.append(instruction)
 
+    def SetTarget(self, targetName):
+        for i in self.instructions:
+            i.SetTarget(targetName)
+
     def __str__(self):
         return self.name
 

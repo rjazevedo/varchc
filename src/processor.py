@@ -13,7 +13,8 @@ class Processor:
         self.inputs = []
         self.failures = []
         self.functions = []
-        print 'Creating Processor'
+        self.name = ''
+        self.wordsize = 32
 
     def AddInstruction(self, instruction):
         self.instructions.append(instruction)
@@ -22,6 +23,12 @@ class Processor:
         for i in self.instructions:
             if i.name == instructionName:
                 return i
+        return None
+
+    def FindGroup(self, groupName):
+        for g in self.groups:
+            if g.name == groupName:
+                return g
         return None
 
     def AddGroup(self, group):
@@ -36,8 +43,16 @@ class Processor:
     def AddFunction(self, f):
         self.functions.append(f)
 
+    def SetName(self, newName):
+        self.name = newName
+
+    def SetWordsize(self, newSize):
+        self.wordsize = newSize
+
     def __repr__(self):
         answer = ''
+        print 'Processor', self.name
+        print 'Wordsize', self.wordsize
         for i in self.instructions:
             answer += i.__repr__() + '\n'
         for g in self.groups:

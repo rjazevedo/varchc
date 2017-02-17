@@ -3,3 +3,6 @@ import mips;
 input p;
 
 load has StuckAt(7, 0) with probability 0.0008;
+alu has BitFlip(random) with probability 0.0001;
+
+muldiv has StuckAt(31, 1) with probability 1;
