@@ -1,6 +1,16 @@
+# This is the basic processor description file. We do not need much information,
+# only to declare each instruction name (as declared in ArchC), the processor name
+# and the target registers.
+
+# Processor name. This name should match ArchC description
 processor mips;
+
+# Wordsize will be used when selecting the random bit. Default 32
 wordsize 32;
 
+# Each instruction must be declared, even if you are not going to assign any failure to it
+# We need instructions names to create the post-behavior and ArchC requires one
+# post-behavior method for each instruction.
 instruction lb, lbu, lh, lhu, lw, lwl, lwr, sb, sh, sw, swl, swr, addi, addiu, slti, sltiu, andi, ori, xori, lui;
 instruction beq, bne, blez, bgtz, bltz, bgez, bltzal, bgezal;
 instruction add, addu, sub, subu, slt, sltu, instr_and, instr_or, instr_xor, instr_nor;
@@ -8,6 +18,9 @@ instruction nop, sll, srl, sra, sllv, srlv, srav, mult, multu, div, divu, mfhi, 
 instruction sys_call, instr_break;
 instruction j, jal;
 
+# Groups are optional and help organizing instructions to easily assign target
+# registers and also the failures. One instruction can be assigned to zero or
+# more groups as necessary
 group I {lb, lbu, lh, lhu, lw, lwl, lwr, sb, sh, sw, swl, swr, addi, addiu, slti, sltiu, andi, ori,
          xori, lui, beq, bne, blez, bgtz, bltz, bgez, bltzal, bgezal};
 group R {add, addu, sub, subu, slt, sltu, instr_and, instr_or, instr_xor, instr_nor, nop, sll,
@@ -22,9 +35,11 @@ group load {lb, lbu, lh, lhu, lw, lwl, lwr};
 group store {sh, sw, swl, swr};
 group memory {lb, lbu, lh, lhu, lw, lwl, lwr, sh, sw, swl, swr};
 group muldiv {mult, multu, div, divu};
-group jumpandlink {jal, jalr};
+
+# These are the target registers of instructions or groups. We use them to
+# automatically create the post-behaviors
 
 alu target is rd;
 load target is rt;
-jumpandlink target is rd;
-
+jal target is rd;
+jalr target is rd;

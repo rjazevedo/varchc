@@ -64,7 +64,14 @@ class ParserActions:
 
     def SetTarget(self, str, loc, tokens):
         group = self.processor.FindGroup(tokens[0])
-        group.SetTarget(tokens[1])
+        if group != None:
+            group.SetTarget(tokens[1])
+        else:
+            instruction = self.processor.FindInstruction(tokens[0])
+            if instruction != None:
+                instruction.SetTarget(tokens[0])
+            else:
+                self.VArchCError('Could not find symbol to set target. Ignoring ' + tokens[0], str, loc)
 
 
 class VArchCParser:
