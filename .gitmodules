@@ -4,3 +4,6 @@
 [submodule "ArchC"]
 	path = ArchC
 	url = git@github.com:lianaduenha/ArchC.git
+[submodule "mips"]
+	path = mips
+	url = https://github.com/rafaelauler/mips
