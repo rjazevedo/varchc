@@ -9,3 +9,6 @@
 	path = mips
 	url = git@github.com:rafaelauler/mips.git
 	branch = mips32r2
+[submodule "SystemC"]
+	path = SystemC
+	url = https://github.com/ArchC/SystemC.git
