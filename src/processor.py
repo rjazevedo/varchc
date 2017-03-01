@@ -49,6 +49,12 @@ class Processor:
     def SetWordsize(self, newSize):
         self.wordsize = newSize
 
+    def GenerateCode(self):
+        returnValue = ''
+        for i in self.instructions:
+            returnValue += i.GenerateCode()
+        return returnValue
+
     def __repr__(self):
         answer = ''
         print 'Processor', self.name

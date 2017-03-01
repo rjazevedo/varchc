@@ -17,6 +17,10 @@ class Group:
         for i in self.instructions:
             i.SetTarget(targetName)
 
+    def SetFailure(self, f):
+        for i in self.instructions:
+            i.SetFailure(f)
+
     def __str__(self):
         return self.name
 

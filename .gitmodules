@@ -4,6 +4,8 @@
 [submodule "ArchC"]
 	path = ArchC
 	url = git@github.com:lianaduenha/ArchC.git
+	branch = vArchC
 [submodule "mips"]
 	path = mips
-	url = https://github.com/rafaelauler/mips
+	url = git@github.com:rafaelauler/mips.git
+	branch = mips32r2

@@ -7,6 +7,16 @@ class Instruction:
     def __init__(self, instructionName):
         self.name = instructionName
         self.targets = []
+        self.failures = []
+
+    def SetTarget(self, targetName):
+        self.targets.append(targetName)
+
+    def SetFailure(self, f):
+        self.failures.append(f)
+
+    def GenerateCode(self):
+        return 'void ac_post_behavior(%s){}\n\n' % self.name
 
     def __str__(self):
         return self.name
@@ -16,9 +26,6 @@ class Instruction:
           return 'Instruction: ' + self.name + '(' + string.join(self.targets, ',') + ')'
         else:
             return 'Instruction: ' + self.name
-
-    def SetTarget(self, targetName):
-        self.targets.append(targetName)
 
 
 class TestInstruction(unittest.TestCase):

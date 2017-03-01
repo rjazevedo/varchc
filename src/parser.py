@@ -55,6 +55,15 @@ class ParserActions:
     def AddFailure(self, str, loc, tokens):
         failure = Failure(tokens[0], tokens[1], tokens[2])
         self.processor.AddFailure(failure)
+        group = self.processor.FindGroup(tokens[0])
+        if group != None:
+            group.SetFailure(failure)
+        else:
+            instruction = self.processor.FindInstruction(tokens[0])
+            if instruction != None:
+                instruction.SetFailure(failure)
+            else:
+                self.VArchCError('Could not find symbol to set target. Ignoring ', tokens[0], str, loc)
 
     def SetProcessorName(self, str, loc, tokens):
         self.processor.SetName(tokens[1])
@@ -72,7 +81,6 @@ class ParserActions:
                 instruction.SetTarget(tokens[0])
             else:
                 self.VArchCError('Could not find symbol to set target. Ignoring ' + tokens[0], str, loc)
-
 
 class VArchCParser:
     content = []
