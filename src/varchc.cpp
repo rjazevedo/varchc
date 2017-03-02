@@ -4,9 +4,14 @@
 
 #define DEBUG_FAILURE_MODE
 
-bool flip_coin(double prob)
+bool flipCoin(double prob)
 {
   return (bool) ((random() / (double) RAND_MAX) <= prob);
+}
+
+int randomRange(int maxValue)
+{
+    return int (random() % maxValue);
 }
 
 inline unsigned int stuckAt(unsigned int data, int bit, int value)

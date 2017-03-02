@@ -3,10 +3,10 @@
 import string
 import unittest
 
-from instruction import Instruction
 from group import Group
 
 class Processor:
+    __instance = None
     def __init__(self):
         self.instructions = []
         self.groups = []
@@ -15,6 +15,13 @@ class Processor:
         self.functions = []
         self.name = ''
         self.wordsize = 32
+
+    def __new__(cls, *args, **kwargs):
+        if Processor.__instance == None:
+            Processor.__instance = object.__new__(cls, args, kwargs)
+        else:
+            print 'Recreating Processor'
+        return Processor.__instance
 
     def AddInstruction(self, instruction):
         self.instructions.append(instruction)
@@ -52,7 +59,8 @@ class Processor:
     def GenerateCode(self):
         returnValue = ''
         for i in self.instructions:
-            returnValue += i.GenerateCode()
+            s = i.GenerateCode()
+            returnValue += s
         return returnValue
 
     def __repr__(self):

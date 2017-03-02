@@ -5,7 +5,7 @@ import unittest
 import pyparsing as pp
 
 from failure import Failure
-from function import Function
+from function import Function, StuckAt, BitFlip
 from group import Group
 from instruction import Instruction
 from processor import Processor
@@ -52,6 +52,19 @@ class ParserActions:
         self.processor.AddFunction(function)
         return function
 
+    def AddStuckAt(self, str, loc, tokens):
+        stuckAt = StuckAt()
+        stuckAt.AddParameter(tokens[0])
+        stuckAt.AddParameter(tokens[1])
+        self.processor.AddFunction(stuckAt)
+        return stuckAt
+
+    def AddBitFlip(self, str, loc, tokens):
+        bitFlip = BitFlip()
+        bitFlip.AddParameter(tokens[0])
+        self.processor.AddFunction(bitFlip)
+        return bitFlip
+
     def AddFailure(self, str, loc, tokens):
         failure = Failure(tokens[0], tokens[1], tokens[2])
         self.processor.AddFailure(failure)
@@ -78,7 +91,7 @@ class ParserActions:
         else:
             instruction = self.processor.FindInstruction(tokens[0])
             if instruction != None:
-                instruction.SetTarget(tokens[0])
+                instruction.SetTarget(tokens[1])
             else:
                 self.VArchCError('Could not find symbol to set target. Ignoring ' + tokens[0], str, loc)
 
@@ -105,6 +118,7 @@ class VArchCParser:
     __dot = pp.Literal('.')
     __plus = pp.Literal('+')
     __or = pp.Literal('|')
+    __and = pp.Literal('&')
     __e = pp.CaselessLiteral('E')
 
     __comment1 = pp.Literal('//').suppress() + pp.restOfLine.suppress()
@@ -140,8 +154,16 @@ class VArchCParser:
 
     __parameter = __symbol | __fpNum | __number
 
-    __function = __symbol + __lPar.suppress() + pp.ZeroOrMore(__parameter + pp.Optional(__comma).suppress()) + __rPar.suppress()
-    __function.setParseAction(actions.AddFunction)
+    __generalFunction = __symbol + __lPar.suppress() + pp.Optional(__parameter + pp.ZeroOrMore(__comma.suppress() + __parameter)) + __rPar.suppress()
+    __generalFunction.setParseAction(actions.AddFunction)
+
+    __stuckAtClause = pp.Literal('StuckAt').suppress() + __lPar.suppress() + (__int | pp.Literal('random')) + __comma.suppress() + __int + __rPar.suppress()
+    __stuckAtClause.setParseAction(actions.AddStuckAt)
+
+    __bitFlipClause = pp.Literal('BitFlip').suppress() + __lPar.suppress() + (__int | pp.Literal('random')) + __rPar.suppress()
+    __bitFlipClause.setParseAction(actions.AddBitFlip)
+
+    __function = __bitFlipClause | __stuckAtClause | __generalFunction
 
     __inputClause = pp.Literal('input').suppress() + __symbol + __semiColon
     __inputClause.setParseAction(actions.AddInput)
@@ -149,7 +171,7 @@ class VArchCParser:
     __importClause = pp.Literal('import').suppress() + __filename + __semiColon
     __importClause.setParseAction(actions.ImportFile)
 
-    __instructionClause = pp.Literal('instruction').suppress() + pp.OneOrMore(__symbol + pp.Optional(__comma).suppress()) + __semiColon
+    __instructionClause = pp.Literal('instruction').suppress() + __symbol + pp.ZeroOrMore(pp.Optional(__comma).suppress() + __symbol) + __semiColon
     __instructionClause.setParseAction(actions.AddInstructions)
 
     __groupClause = pp.Literal('group').suppress() + __symbol + __lBrace.suppress() + \
@@ -167,7 +189,9 @@ class VArchCParser:
     __wordsizeClause = pp.Literal('wordsize') + __int + __semiColon
     __wordsizeClause.setParseAction(actions.SetProcessorWordsize)
 
-    __targetClause = __symbol + pp.Literal('target').suppress() + pp.Literal('is').suppress() + __symbol + __semiColon
+    __targetRegister = pp.Combine(__symbol + pp.Optional(__lBrack + (__int | __symbol) + __rBrack))
+
+    __targetClause = __symbol + pp.Literal('target').suppress() + pp.Literal('is').suppress() + __targetRegister + __semiColon
     __targetClause.setParseAction(actions.SetTarget)
 
     __varchc_token = __importClause | __instructionClause | __groupClause | __inputClause | \

@@ -16,7 +16,19 @@ class Instruction:
         self.failures.append(f)
 
     def GenerateCode(self):
-        return 'void ac_post_behavior(%s){}\n\n' % self.name
+        if (len(self.failures) != 0) and (len(self.targets) != 0):
+            return """
+void ac_post_behavior(%s)
+{
+%s
+}\n\n
+""" % (self.name, string.join(map(lambda x: x.GenerateCode(self.targets[0]), self.failures), '\n'))
+        else:
+            return """
+void ac_post_behavior(%s)
+{
+}\n
+""" % self.name
 
     def __str__(self):
         return self.name

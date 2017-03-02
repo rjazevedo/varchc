@@ -6,3 +6,9 @@ class Failure:
 
     def __repr__(self):
         return 'Failure: ' + self.instr_group + ' has ' + str(self.function) + ' with probability ' + self.probability
+
+    def GenerateCode(self, targetRegister):
+        return """  if (flipCoin(%s))
+  {
+    %s = %s;
+  }""" % (self.probability, targetRegister, self.function.GenerateCode(targetRegister))

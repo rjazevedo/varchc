@@ -39,7 +39,7 @@ group muldiv {mult, multu, div, divu};
 # These are the target registers of instructions or groups. We use them to
 # automatically create the post-behaviors
 
-alu target is rd;
-load target is rt;
-jal target is rd;
-jalr target is rd;
+alu target is RB[rd];
+load target is RB[rt];
+jal target is RB[rd];
+jalr target is RB[rd];
