@@ -25,4 +25,4 @@ if __name__ == '__main__':
     if args.verbose:
         print parser.processor
 
-    print processor.GenerateCode()
+    processor.SaveCode()

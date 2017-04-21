@@ -5,6 +5,7 @@ import unittest
 
 from group import Group
 
+
 class Processor:
     __instance = None
     def __init__(self):
@@ -62,6 +63,14 @@ class Processor:
             s = i.GenerateCode()
             returnValue += s
         return returnValue
+
+    def SaveCode(self):
+        fileName = self.name + '_pb.cpp'
+        print 'saving code to', fileName
+        outFile = open(fileName, 'wt')
+        code = self.GenerateCode()
+        outFile.writelines(code)
+        outFile.close()
 
     def __repr__(self):
         answer = ''
